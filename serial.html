@@ -1,0 +1,333 @@
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Serial Map</title>
+    <style>
+      html, body, #map-canvas {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
+      }
+	  .labels {
+     color: red;
+     background-color: white;
+     font-family: "Lucida Grande", "Arial", sans-serif;
+     font-size: 10px;
+     font-weight: bold;
+     text-align: center;
+     width: 80px;     
+     border: 2px solid black;
+     white-space: nowrap;
+	 }
+	 .tower_labels {
+     color: white;
+     background-color: black;
+     font-family: "Lucida Grande", "Arial", sans-serif;
+     font-size: 10px;
+     font-weight: bold;
+     text-align: center;
+     width: 40px;     
+     border: 2px solid black;
+     white-space: nowrap;
+	 }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+	<script src="http://google-maps-utility-library-v3.googlecode.com/svn/tags/markerwithlabel/1.1.8/src/markerwithlabel.js"></script>
+    <script>
+// This example creates circles on the map, representing
+// signalSizes in Serial.
+
+// First, create an object containing LatLng and signalSize for each tower.
+var defaultSignalStrength = 200;
+var towerMap = {};
+towerMap['L602'] = {
+  center: new google.maps.LatLng(39.2920829, -76.6192617),
+  signalSize: defaultSignalStrength
+};
+towerMap['L654'] = {
+  center: new google.maps.LatLng(39.285676, -76.7340494),
+  signalSize: defaultSignalStrength
+};
+towerMap['L651'] = {
+  center: new google.maps.LatLng(39.3091105, -76.7382121),
+  signalSize: defaultSignalStrength
+};
+towerMap['L688'] = {
+  center: new google.maps.LatLng(39.2984299, -76.8258882),
+  signalSize: defaultSignalStrength
+};
+towerMap['L652'] = {
+  center: new google.maps.LatLng(39.2974337, -76.6666156),
+  signalSize: defaultSignalStrength
+};
+towerMap['L608'] = {
+  center: new google.maps.LatLng(39.263351, -76.6691614),
+  signalSize: defaultSignalStrength
+};
+towerMap['L653'] = {
+  center: new google.maps.LatLng(39.2937139, -76.6872716),
+  signalSize: defaultSignalStrength
+};
+towerMap['L655'] = {
+  center: new google.maps.LatLng(39.2640155, -76.7148233),
+  signalSize: defaultSignalStrength
+};
+towerMap['L689'] = {
+  center: new google.maps.LatLng(39.3113684, -76.7011332),
+  signalSize: defaultSignalStrength
+};
+towerMap['L698'] = {
+  center: new google.maps.LatLng(39.2892633, -76.7644334),
+  signalSize: defaultSignalStrength
+};
+
+//Create markers for Points of Interest
+var POI1 = new google.maps.LatLng(39.3025287,-76.7112903);
+var POI2 = new google.maps.LatLng(39.3031601,-76.6975959);
+var POI3 = new google.maps.LatLng(39.3233754,-76.6902506);
+var POI4 = new google.maps.LatLng(39.2495551,-76.764962);
+
+//Create markers for towers
+var L698 = new google.maps.LatLng(39.2892633, -76.7644334);
+var L602 = new google.maps.LatLng(39.2920829, -76.6192617);
+var L654 = new google.maps.LatLng(39.285676, -76.7340494);
+var L651 = new google.maps.LatLng(39.3091105, -76.7382121);
+var L688 = new google.maps.LatLng(39.2984299, -76.8258882);
+var L652 = new google.maps.LatLng(39.2974337, -76.6666156);
+var L608 = new google.maps.LatLng(39.263351, -76.6691614);
+var L653 = new google.maps.LatLng(39.2937139, -76.6872716);
+var L655 = new google.maps.LatLng(39.2640155, -76.7148233);
+var L689 = new google.maps.LatLng(39.3113684, -76.7011332);
+var L698 = new google.maps.LatLng(39.2892633, -76.7644334);
+
+
+
+var towerCircle;
+
+function initialize() {
+  // Create the map.
+  var mapOptions = {
+    zoom: 13,
+    center: new google.maps.LatLng(39.31545,-76.734396),
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+
+  var map = new google.maps.Map(document.getElementById('map-canvas'),
+      mapOptions);
+	  
+	  
+//points of interest
+var POI1_marker = new MarkerWithLabel({
+       position: POI1,
+       map: map,
+       draggable: false,
+       raiseOnDrag: true,
+       labelContent: "Park and Ride",
+       labelAnchor: new google.maps.Point(3, 30),
+       labelClass: "labels", // the CSS class for the label
+       labelInBackground: false,
+	   icon: {
+      path: google.maps.SymbolPath.CIRCLE,
+      scale: 4
+    },
+});
+var POI2_marker = new MarkerWithLabel({
+       position: POI2,
+       map: map,
+       draggable: false,
+       raiseOnDrag: true,
+       labelContent: "Hae's Body",
+       labelAnchor: new google.maps.Point(3, 30),
+       labelClass: "labels", // the CSS class for the label
+       labelInBackground: false,
+	   icon: {
+      path: google.maps.SymbolPath.CIRCLE,
+      scale: 4
+    },
+});
+var POI3_marker = new MarkerWithLabel({
+       position: POI3,
+       map: map,
+       draggable: false,
+       raiseOnDrag: true,
+       labelContent: "Golf Course",
+       labelAnchor: new google.maps.Point(3, 30),
+       labelClass: "labels", // the CSS class for the label
+       labelInBackground: false,
+	   icon: {
+      path: google.maps.SymbolPath.CIRCLE,
+      scale: 4
+    },
+});
+var POI4_marker = new MarkerWithLabel({
+       position: POI4,
+       map: map,
+       draggable: false,
+       raiseOnDrag: true,
+       labelContent: "The Cliffs",
+       labelAnchor: new google.maps.Point(3, 30),
+       labelClass: "labels", // the CSS class for the label
+       labelInBackground: false,
+	   icon: {
+      path: google.maps.SymbolPath.CIRCLE,
+      scale: 4
+    },
+});
+
+
+
+
+//towers
+var L698_marker = new MarkerWithLabel({
+       position: L698,
+       map: map,
+       draggable: false,
+       raiseOnDrag: true,
+       labelContent: "L698",
+       labelAnchor: new google.maps.Point(20, 10),
+       labelClass: "tower_labels", // the CSS class for the label
+       labelInBackground: false,
+	   opacity: 0.0
+});
+var L602_marker = new MarkerWithLabel({
+       position: L602,
+       map: map,
+       draggable: false,
+       raiseOnDrag: true,
+       labelContent: "L602",
+       labelAnchor: new google.maps.Point(20, 10),
+       labelClass: "tower_labels", // the CSS class for the label
+       labelInBackground: false,
+	   opacity: 0.0
+});
+var L654_marker = new MarkerWithLabel({
+       position: L654,
+       map: map,
+       draggable: false,
+       raiseOnDrag: true,
+       labelContent: "L654",
+       labelAnchor: new google.maps.Point(20, 10),
+       labelClass: "tower_labels", // the CSS class for the label
+       labelInBackground: false,
+	   opacity: 0.0
+});
+var L651_marker = new MarkerWithLabel({
+       position: L651,
+       map: map,
+       draggable: false,
+       raiseOnDrag: true,
+       labelContent: "L651",
+       labelAnchor: new google.maps.Point(20, 10),
+       labelClass: "tower_labels", // the CSS class for the label
+       labelInBackground: false,
+	   opacity: 0.0
+});
+var L688_marker = new MarkerWithLabel({
+       position: L688,
+       map: map,
+       draggable: false,
+       raiseOnDrag: true,
+       labelContent: "L688",
+       labelAnchor: new google.maps.Point(20, 10),
+       labelClass: "tower_labels", // the CSS class for the label
+       labelInBackground: false,
+	   opacity: 0.0
+});	  
+var L652_marker = new MarkerWithLabel({
+       position: L652,
+       map: map,
+       draggable: false,
+       raiseOnDrag: true,
+       labelContent: "L652",
+       labelAnchor: new google.maps.Point(20, 10),
+       labelClass: "tower_labels", // the CSS class for the label
+       labelInBackground: false,
+	   opacity: 0.0
+});
+var L608_marker = new MarkerWithLabel({
+       position: L608,
+       map: map,
+       draggable: false,
+       raiseOnDrag: true,
+       labelContent: "L608",
+       labelAnchor: new google.maps.Point(20, 10),
+       labelClass: "tower_labels", // the CSS class for the label
+       labelInBackground: false,
+	   opacity: 0.0
+});
+var L653_marker = new MarkerWithLabel({
+       position: L653,
+       map: map,
+       draggable: false,
+       raiseOnDrag: true,
+       labelContent: "L653",
+       labelAnchor: new google.maps.Point(20, 10),
+       labelClass: "tower_labels", // the CSS class for the label
+       labelInBackground: false,
+	   opacity: 0.0
+});
+var L655_marker = new MarkerWithLabel({
+       position: L655,
+       map: map,
+       draggable: false,
+       raiseOnDrag: true,
+       labelContent: "L655",
+       labelAnchor: new google.maps.Point(20, 10),
+       labelClass: "tower_labels", // the CSS class for the label
+       labelInBackground: false,
+	   opacity: 0.0
+});
+var L689_marker = new MarkerWithLabel({
+       position: L689,
+       map: map,
+       draggable: false,
+       raiseOnDrag: true,
+       labelContent: "L689",
+       labelAnchor: new google.maps.Point(20, 10),
+       labelClass: "tower_labels", // the CSS class for the label
+       labelInBackground: false,
+	   opacity: 0.0
+});
+var L698_marker = new MarkerWithLabel({
+       position: L698,
+       map: map,
+       draggable: false,
+       raiseOnDrag: true,
+       labelContent: "L698",
+       labelAnchor: new google.maps.Point(20, 10),
+       labelClass: "tower_labels", // the CSS class for the label
+       labelInBackground: false,
+	   opacity: 0.0
+});
+
+  // Construct the circle for each value in towerMap.
+  // Note: We scale the area of the circle based on the signalSize.
+  for (var tower in towerMap) {
+    var signalSizeOptions = {
+      strokeColor: '#FF0000',
+      strokeOpatower: 0.8,
+      strokeWeight: 2,
+      fillColor: '#FF0000',
+      fillOpatower: 0.35,
+      map: map,
+      center: towerMap[tower].center,
+      radius: Math.sqrt(towerMap[tower].signalSize) * 100
+    };
+    // Add the circle for this tower to the map.
+    towerCircle = new google.maps.Circle(signalSizeOptions);
+  }
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+  </head>
+  <body>
+    <div id="map-canvas"></div>
+  </body>
+</html>
+
